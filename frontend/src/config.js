@@ -14,7 +14,7 @@ export const SITE_CONFIG = {
   url: siteBase(),
 
   // ① 页脚 GitHub 仓库跳转链接：修改这里即可全局生效
-  github: 'https://github.com/sdlw7757/SCMirror',
+  github: 'https://github.com/yun1002/SCMirror',
 
   // ② 简短版免责声明（仅页脚展示，弱化字体）
   disclaimer:

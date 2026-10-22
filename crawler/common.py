@@ -23,8 +23,8 @@ SITE_NAME_EN = "SeaCloud Mirror"
 # 域名不写死：部署后通过环境变量 SITE_URL 提供给（爬虫/CI）即可，随时可更换。
 # 未设置时为空 → sitemap / robots 使用相对路径，前端运行时用当前访问域名自适应。
 SITE_URL = (os.environ.get("SITE_URL", "") or "").strip().rstrip("/")
-GITHUB_REPO = "https://github.com/sdlw7757/SCMirror"
-GITHUB_REPO_EN = "https://github.com/sdlw7757/SCMirror"
+GITHUB_REPO = "https://github.com/yun1002/SCMirror"
+GITHUB_REPO_EN = "https://github.com/yun1002/SCMirror"
 
 # 简短免责声明（仅展示于页脚）
 DISCLAIMER = (

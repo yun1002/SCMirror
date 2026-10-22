@@ -113,7 +113,7 @@ BAIDU_SITE: ${{ secrets.BAIDU_SITE }}
 
 ### 方式一：Cloudflare Pages（推荐，根路径域名）
 
-在 Cloudflare Dashboard → Workers & Pages → 创建项目 → 连接 GitHub 仓库 `sdlw7757/SCMirror`。
+在 Cloudflare Dashboard → Workers & Pages → 创建项目 → 连接 GitHub 仓库 `yun1002/SCMirror`。
 **务必按下面配置**（`package.json` 在 `frontend/` 子目录，Root 目录不设会导致 `npm ci` 找不到 lock 而构建失败）：
 
 | 配置项 | 值 |
@@ -156,6 +156,6 @@ BAIDU_SITE: ${{ secrets.BAIDU_SITE }}
 
 <div align="center">
 
-Made with ❤️ · [海云镜像 · SeaCloud Mirror](https://github.com/sdlw7757/SCMirror)
+Made with ❤️ · [海云镜像 · SeaCloud Mirror](https://github.com/yun1002/SCMirror)
 
 </div>

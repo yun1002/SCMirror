@@ -26,7 +26,7 @@ if (fs.existsSync(src)) {
       name: '海云镜像',
       name_en: 'SeaCloud Mirror',
       url: '',   // 域名自适应，避免写死
-      github: 'https://github.com/sdlw7757/SCMirror',
+      github: 'https://github.com/yun1002/SCMirror',
       disclaimer:
         '【免责声明】本站仅聚合整理网络公开元信息与下载链接，不存储镜像文件。软件版权归微软所有，请使用正版。本站仅供学习参考，不对文件安全与完整性负责。',
       sources: {},
