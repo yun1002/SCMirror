@@ -84,6 +84,8 @@ function wrap(title, description, body, url) {
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}" />
 <link rel="canonical" href="${esc(url)}" />
+<!-- 让 2.6MB 数据与 CSS/JS 并行下载，缩短骨架停留时间 -->
+<link rel="preload" as="fetch" href="${SITE.url}/data/iso_data.json" crossorigin />
 ${HEAD_ASSETS}
 <!-- 百度普通收录 - 自动推送：用户访问时将该页 URL 实时提交给百度 -->
 <script>
@@ -116,13 +118,13 @@ ${body}
 <div id="app"></div>
 <script>window.__SSR__=true;</script>
 <script>
-// 数据就绪（SPA 首屏渲染完成，App 层派发 dsh-prerender-ready）后再隐藏静态骨架，
-// 避免在数据(约 3.5MB JSON)解析完成前提前隐藏，消除首开"空白/闪烁"。
+// Vue 挂载后立即交接：骨架不再等 2.6MB 数据解析完才消失，
+// 加载期间由 App.vue 自己显示「数据同步中…」，避免首屏长时间停在一张静态页。
 // 交接时先让骨架脱离文档流（SPA 立即顶上来），再淡出，最后才 display:none。
 function fadeOutShell(shell) {
   if (!shell || shell.classList.contains('shell-hiding')) return
   shell.classList.add('shell-hiding')
-  setTimeout(function () { shell.style.display = 'none' }, 200)
+  setTimeout(function () { shell.style.display = 'none' }, 140)
 }
 function hideShell() {
   var app = document.getElementById('app')
@@ -143,9 +145,14 @@ function hideShell() {
     }
   }, 50)
 }
-window.addEventListener('dsh-prerender-ready', hideShell)
-// 兜底：极端情况（事件未触发 / 首屏异常）10 秒后强制隐藏，避免永远双份
-setTimeout(hideShell, 10000)
+// module 脚本（defer）执行完才会触发 DOMContentLoaded，此时 Vue 已挂载
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', hideShell)
+} else {
+  hideShell()
+}
+window.addEventListener('dsh-prerender-ready', hideShell) // 兜底
+setTimeout(hideShell, 10000) // 极端情况兜底
 </script>
 ${BODY_ASSETS}
 </body>
@@ -252,7 +259,7 @@ function wikiSSR() {
 
 const SSRCSS = `<style>
 /* 交接动画：先脱离文档流让 SPA 顶上来，再让骨架浮在上层淡出，避免移除时的跳动 */
-#ssr-shell{transition:opacity .18s ease}
+#ssr-shell{transition:opacity .12s ease}
 #ssr-shell.shell-hiding{position:absolute;top:0;left:0;width:100%;z-index:10;pointer-events:none;opacity:0;background:#05080f}
 @media (prefers-reduced-motion:reduce){#ssr-shell{transition:none}}
 .ssr-app{max-width:1200px;margin:0 auto;padding:20px;background:#05080f;color:#e2e8f0;font-family:system-ui,'Microsoft YaHei',sans-serif}
