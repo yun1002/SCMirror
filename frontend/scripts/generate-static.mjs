@@ -32,9 +32,11 @@ let BODY_ASSETS = ''
 try {
   const spa = fs.readFileSync(SPA_INDEX, 'utf-8')
   HEAD_ASSETS = (spa.match(/<link[^>]*rel="stylesheet"[^>]*>/gi) || []).join('')
-  BODY_ASSETS = (spa.match(/<script[^>]*type="module"[^>]*><\/script>/gi) || [])
-    .concat(spa.match(/<script[^>]*src="\/assets\/[^"]*\.js"[^>]*><\/script>/gi) || [])
-    .join('')
+  // 只按 src 提取一次；旧的「module 正则 + src 正则」会重复匹配同一个标签，
+  // 导致每个静态页输出两遍相同的 <script>。Set 去重后再拼接。
+  BODY_ASSETS = [...new Set(
+    spa.match(/<script[^>]*src="[^"]+\.js"[^>]*><\/script>/gi) || []
+  )].join('')
 } catch (e) {
   console.warn('[generate-static] 读取 SPA index.html 失败:', e.message)
 }

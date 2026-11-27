@@ -23,7 +23,7 @@
 | 特性 | 说明 |
 | --- | --- |
 | 🖥 **零服务器纯静态** | 部署到 Cloudflare Pages，仅凭静态文件即可运行，无需后端进程 |
-| 🔄 **全自动更新** | GitHub Actions 每日 02:00(北京时间) 自动抓取三站 → 合并 → 推送 → 提交 |
+| 🔄 **全自动更新** | GitHub Actions 每日 00:00(北京时间) 自动抓取三站 → 合并 → 推送 → 提交 |
 | 🔍 **全自动百度收录** | 每次更新自动增量推送 sitemap 到百度，无需人工 | 
 | 🧲 **三源聚合** | 山己几子木 / 系统库 / HelloWindows，三站各自独立保存，互不干扰 |
 | ⚙️ **域名自适应** | 不绑定固定域名，换网址无需改代码，一处配置即生效 |
@@ -51,7 +51,7 @@ npm run preview      # 预览 dist
 
 ```
 SCMirror/
-├── .github/workflows/crawl.yml  # GitHub Actions：每日 02:00(北京) 自动抓取+合并+推送+提交
+├── .github/workflows/crawl.yml  # GitHub Actions：每日 00:00(北京) 自动抓取+合并+推送+提交
 ├── crawler/                     # Python 爬虫系统（零服务器）
 │   ├── main.py                  # 主入口：抓取→合并→统计→sitemap→百度推送
 │   ├── common.py                # 共享配置 / 常量 / HTTP / 分类
