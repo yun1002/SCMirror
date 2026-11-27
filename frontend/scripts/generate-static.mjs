@@ -117,12 +117,18 @@ ${body}
 <script>window.__SSR__=true;</script>
 <script>
 // 数据就绪（SPA 首屏渲染完成，App 层派发 dsh-prerender-ready）后再隐藏静态骨架，
-// 避免在数据(约 3.5MB JSON)解析完成前提前隐藏，消除首开"空白/闪烁"
+// 避免在数据(约 3.5MB JSON)解析完成前提前隐藏，消除首开"空白/闪烁"。
+// 交接时先让骨架脱离文档流（SPA 立即顶上来），再淡出，最后才 display:none。
+function fadeOutShell(shell) {
+  if (!shell || shell.classList.contains('shell-hiding')) return
+  shell.classList.add('shell-hiding')
+  setTimeout(function () { shell.style.display = 'none' }, 200)
+}
 function hideShell() {
   var app = document.getElementById('app')
   var shell = document.getElementById('ssr-shell')
   if (app && shell && app.children.length > 0) {
-    shell.style.display = 'none'
+    fadeOutShell(shell)
     return
   }
   // 首帧未就绪则轮询等待（事件可能早于 Vue 渲染到达），最多 2 秒
@@ -130,7 +136,7 @@ function hideShell() {
   var t = setInterval(function () {
     n++
     if (app && shell && app.children.length > 0) {
-      shell.style.display = 'none'
+      fadeOutShell(shell)
       clearInterval(t)
     } else if (n >= 40) {
       clearInterval(t)
@@ -245,6 +251,10 @@ function wikiSSR() {
 }
 
 const SSRCSS = `<style>
+/* 交接动画：先脱离文档流让 SPA 顶上来，再让骨架浮在上层淡出，避免移除时的跳动 */
+#ssr-shell{transition:opacity .18s ease}
+#ssr-shell.shell-hiding{position:absolute;top:0;left:0;width:100%;z-index:10;pointer-events:none;opacity:0;background:#05080f}
+@media (prefers-reduced-motion:reduce){#ssr-shell{transition:none}}
 .ssr-app{max-width:1200px;margin:0 auto;padding:20px;background:#05080f;color:#e2e8f0;font-family:system-ui,'Microsoft YaHei',sans-serif}
 .ssr-top{padding:8px 14px;border-bottom:1px solid #1e293b;margin-bottom:18px;border-radius:10px;background:#0d1424}
 .ssr-logo{display:inline-flex;align-items:center;gap:8px;color:#e2e8f0;text-decoration:none;font-weight:700;font-size:15px}
